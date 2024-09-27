@@ -8,23 +8,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.LoginPage;
 
 public class LoginTests extends TestBase {
 
 
     @Test
     public void verifyLogin() throws InterruptedException {
-        WebElement lnkSignIn = driver.findElement(By.linkText("Sign In"));
-        lnkSignIn.click();
-        driver.findElement(By.name("login[username]"))
-                .sendKeys("pradeep.pp@gmail.com");
-        driver.findElement(By.name("login[password]"))
-                .sendKeys("Test#123");
-        driver.findElement(By.id("send2")).click();
-        Thread.sleep(3000);
-        String expWelcMsg = "Welcome, Automation Tester!";
-        String actWelcMsg = driver.findElement(By.className("logged-in")).getText();
-        Assert.assertEquals(actWelcMsg,expWelcMsg,"Login failed");
+        String email = "pradeep.pp@gmail.com";
+        String password = "Test#123";
+        String fullName = "Automation Tester";
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login(email,password,true,fullName);
     }
     @Test
     public void verifyTitle(){
