@@ -1,12 +1,11 @@
 package pages;
 
+import lib.PageBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-public class LoginPage {
-    private WebDriver driver;
+public class LoginPage extends PageBase {
     //Locators
     private By lnkSignIn = By.linkText("Sign In");
     private By txtEmail = By.name("login[username]");
@@ -15,24 +14,20 @@ public class LoginPage {
     private By lblWelcome = By.className("logged-in");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
+        super.driver = driver;
+    }
+    public void login(String email, String password){
+        click(lnkSignIn);
+        sendKeys(txtEmail,email);
+        sendKeys(txtPassword,password);
+        click(btnSignIn);
     }
 
-    public void login(String email,String password,boolean validCredential,String fullName)
+    public void loginWithValidCredentials(String email, String password, String fullName)
             throws InterruptedException {
+        login(email,password);
+        String expWelcMsg = "Welcome, " +fullName+ "!";
+        Assert.assertTrue(isTextPresent(expWelcMsg),"User not logged in");
 
-        WebElement signInLink = driver.findElement(lnkSignIn);
-        signInLink.click();
-        driver.findElement(txtEmail)
-                .sendKeys(email);
-        driver.findElement(txtPassword)
-                .sendKeys(password);
-        driver.findElement(btnSignIn).click();
-        Thread.sleep(3000);
-        if(validCredential) {
-            String expWelcMsg = "Welcome, " +fullName+ "!";
-            String actWelcMsg = driver.findElement(lblWelcome).getText();
-            Assert.assertEquals(actWelcMsg, expWelcMsg, "Login failed");
-        }
     }
 }
